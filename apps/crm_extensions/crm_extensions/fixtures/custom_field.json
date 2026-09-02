@@ -1,0 +1,65 @@
+[
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Organization-tenant_id",
+    "dt": "CRM Organization",
+    "fieldname": "tenant_id",
+    "label": "Tenant",
+    "fieldtype": "Link",
+    "options": "Tenant",
+    "in_standard_filter": 1,
+    "description": "Row-level isolation key (spec §3.2B)."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Organization-is_anchor",
+    "dt": "CRM Organization",
+    "fieldname": "is_anchor",
+    "label": "Is Anchor",
+    "fieldtype": "Check",
+    "default": "0",
+    "description": "Marks this organization as an Anchor (attestation partner, not a borrower — spec §1.2) rather than a generic CRM organization."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Lead-tenant_id",
+    "dt": "CRM Lead",
+    "fieldname": "tenant_id",
+    "label": "Tenant",
+    "fieldtype": "Link",
+    "options": "Tenant",
+    "in_standard_filter": 1,
+    "description": "Row-level isolation key (spec §3.2B)."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Lead-anchor",
+    "dt": "CRM Lead",
+    "fieldname": "anchor",
+    "label": "Anchor",
+    "fieldtype": "Link",
+    "options": "CRM Organization",
+    "description": "The Anchor this vendor lead was referred through."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Lead-assigned_field_agent",
+    "dt": "CRM Lead",
+    "fieldname": "assigned_field_agent",
+    "label": "Assigned Field Agent",
+    "fieldtype": "Link",
+    "options": "User",
+    "in_standard_filter": 1
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "CRM Lead-performed_by_agent",
+    "dt": "CRM Lead",
+    "fieldname": "performed_by_agent",
+    "label": "Performed By Agent",
+    "fieldtype": "Link",
+    "options": "User",
+    "read_only": 1,
+    "description": "Set automatically when a Field Agent creates/edits this record on the vendor's behalf (spec §4.3 proxy-action pattern)."
+  }
+]

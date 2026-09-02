@@ -6,15 +6,16 @@ app_email = "dev@projectk.example"
 app_license = "mit"
 required_apps = ["frappe"]
 
-# Every other app in this bench (crm, los_engine, ocen_connector, ddp_engine,
-# portal_gateway) depends on identity_core for Role/Role Profile definitions
-# and the Tenant registry. identity_core depends on nothing but frappe.
+# Every other app in this bench (crm_extensions, los_engine, ocen_connector,
+# ddp_engine, portal_gateway) depends on identity_core for Role/Role Profile
+# definitions and the Tenant registry. identity_core depends on nothing but
+# frappe.
 
 # Fixtures — Role and Role Profile records matching spec §4.1. Re-export
 # with `bench --site <site> export-fixtures --app identity_core` after
 # changing role/permission definitions in the Desk UI.
 fixtures = [
-    {"dt": "Role", "filters": [["name", "in", [
+    {"doctype": "Role", "filters": [["name", "in", [
         "Borrower",
         "Field Agent",
         "CRM User",
@@ -24,7 +25,7 @@ fixtures = [
         "Lender Portal User",
         "Anchor Portal User",
     ]]]},
-    {"dt": "Role Profile", "filters": [["name", "in", [
+    {"doctype": "Role Profile", "filters": [["name", "in", [
         "Borrower",
         "Field Agent",
         "Credit Ops",

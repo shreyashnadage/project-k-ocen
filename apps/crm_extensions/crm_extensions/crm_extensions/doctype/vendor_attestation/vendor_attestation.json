@@ -1,0 +1,100 @@
+{
+  "doctype": "DocType",
+  "name": "Vendor Attestation",
+  "module": "CRM Extensions",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "format:ATT-{#####}",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "An Anchor confirming a vendor relationship (and, where possible, transaction data) — spec §1.2. Anchor Admin's write scope (spec §4.1) is deliberately limited to their own vendor list and these attestation records, nothing else.",
+  "fields": [
+    {
+      "fieldname": "anchor",
+      "label": "Anchor",
+      "fieldtype": "Link",
+      "options": "CRM Organization",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "vendor_lead",
+      "label": "Vendor Lead",
+      "fieldtype": "Link",
+      "options": "CRM Lead",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "attestation_status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Pending\nConfirmed\nDisputed",
+      "default": "Pending",
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "attested_on",
+      "label": "Attested On",
+      "fieldtype": "Datetime"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "relationship_notes",
+      "label": "Relationship Notes",
+      "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "transaction_data_shared",
+      "label": "Transaction Data Shared",
+      "fieldtype": "Check",
+      "default": "0",
+      "description": "Whether the Anchor has also shared transaction-level data for this vendor, beyond confirming the relationship exists."
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Anchor Portal User",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1
+    },
+    {
+      "role": "Field Agent",
+      "read": 1
+    }
+  ]
+}

@@ -21,5 +21,5 @@ Auth source of truth for the OCEN platform bench. Owns:
   `before_insert`/`before_save` controller hook.
 
 No other app should be a dependency of this one. Every other app in this
-bench (`crm`, `los_engine`, `ocen_connector`, `ddp_engine`, `portal_gateway`)
+bench (`crm_extensions`, `los_engine`, `ocen_connector`, `ddp_engine`, `portal_gateway`)
 should list `identity_core` as a required app.

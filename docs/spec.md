@@ -151,7 +151,7 @@ User Permission / Role Permission mechanism can express it declaratively.
 | App | Owns | Notes |
 |---|---|---|
 | `identity_core` | Users, Roles, Role Profiles, tenant registry, org hierarchy | Auth source of truth for all other apps |
-| `crm` | Anchor pipeline (Organization/Deal), Vendor lead pipeline (Lead) | Fork/extend Frappe CRM; do not modify core, extend via custom app |
+| `crm_extensions` (spec calls this `crm`) | Anchor pipeline (Organization/Deal), Vendor lead pipeline (Lead) | Extends Frappe CRM via Custom Field + doc_events; named `crm_extensions` in this repo because Frappe CRM itself installs as an app named `crm` — do not modify Frappe CRM core |
 | `los_engine` | Loan Lead, Loan Application, underwriting workflow, offer records | Frappe Lending v16 selected as LOS core per full-pivot decision — see §3.4 |
 | `ocen_connector` | OCEN Participant, OCEN Request Log, async request/response state machine, webhook receivers | See §6 for full spec |
 | `ddp_engine` | Trust Graph Entry, AA data ingestion, scoring interface | Thin adapter calling an external service, never hosts proprietary scoring logic in-process — see §3.6 |

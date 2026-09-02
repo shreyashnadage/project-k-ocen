@@ -1,0 +1,122 @@
+{
+  "doctype": "DocType",
+  "name": "Loan Lead",
+  "module": "LOS Engine",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "format:LEAD-{#####}",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "Pre-application stage: a vendor's expression of interest / eligibility pre-screening, before a formal Loan Application exists. Frappe Lending (the `lending` app) has no equivalent concept — its Loan Application is the first doctype in its own flow. Converts 1:1 into a Loan Application once basic eligibility is confirmed.",
+  "fields": [
+    {
+      "fieldname": "vendor_lead",
+      "label": "Vendor Lead (CRM)",
+      "fieldtype": "Link",
+      "options": "CRM Lead",
+      "description": "The vendor lead pipeline record (owned by the crm app) this loan interest originated from."
+    },
+    {
+      "fieldname": "tenant_id",
+      "label": "Tenant",
+      "fieldtype": "Link",
+      "options": "Tenant",
+      "reqd": 1,
+      "in_standard_filter": 1,
+      "description": "Row-level isolation key (spec §3.2B) — the vendor's anchor/cluster."
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "assigned_field_agent",
+      "label": "Assigned Field Agent",
+      "fieldtype": "Link",
+      "options": "User",
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "New\nEligibility Check\nEligible\nIneligible\nConverted\nDropped",
+      "default": "New",
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "requested_amount",
+      "label": "Requested Amount",
+      "fieldtype": "Currency"
+    },
+    {
+      "fieldname": "purpose",
+      "label": "Purpose",
+      "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "column_break_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "performed_by_agent",
+      "label": "Performed By Agent",
+      "fieldtype": "Link",
+      "options": "User",
+      "read_only": 1,
+      "description": "Set automatically when a Field Agent creates/edits this record on the vendor's behalf (spec §4.3 proxy-action pattern)."
+    },
+    {
+      "fieldname": "loan_application",
+      "label": "Loan Application",
+      "fieldtype": "Link",
+      "options": "Loan Application",
+      "read_only": 1,
+      "description": "Set once this lead is converted (status = Converted)."
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Field Agent",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "LOS User",
+      "read": 1,
+      "write": 1
+    }
+  ]
+}

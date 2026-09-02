@@ -1,0 +1,16 @@
+include MANIFEST.in
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ddp_engine *.css
+recursive-include ddp_engine *.csv
+recursive-include ddp_engine *.html
+recursive-include ddp_engine *.js
+recursive-include ddp_engine *.json
+recursive-include ddp_engine *.md
+recursive-include ddp_engine *.png
+recursive-include ddp_engine *.py
+recursive-include ddp_engine *.svg
+recursive-include ddp_engine *.txt
+recursive-exclude ddp_engine *.pyc

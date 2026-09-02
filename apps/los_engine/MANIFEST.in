@@ -1,0 +1,16 @@
+include MANIFEST.in
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include los_engine *.css
+recursive-include los_engine *.csv
+recursive-include los_engine *.html
+recursive-include los_engine *.js
+recursive-include los_engine *.json
+recursive-include los_engine *.md
+recursive-include los_engine *.png
+recursive-include los_engine *.py
+recursive-include los_engine *.svg
+recursive-include los_engine *.txt
+recursive-exclude los_engine *.pyc

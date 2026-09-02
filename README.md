@@ -17,13 +17,16 @@ the previously-scaffolded Fineract/Temporal/GoRules architecture.
 
 ```
 apps/                   Frappe apps (bounded contexts), one per subdirectory.
-  identity_core/        Users, Roles, Role Profiles, tenant registry, org hierarchy.
-  crm_extensions/        Anchor pipeline + Vendor lead pipeline, extends Frappe CRM.
-  los_engine/            Loan Lead, Loan Application, underwriting workflow, offers.
+  identity_core/         Users, Roles, Role Profiles, tenant registry, org hierarchy.
+  crm_extensions/        Anchor pipeline + Vendor lead pipeline, extends Frappe CRM
+                         (requires the upstream `crm` app — see its README).
+  los_engine/            Loan Lead + thin extensions over Frappe Lending's Loan
+                         Application (requires the upstream `lending` app).
   ocen_connector/        OCEN 4.0 async adapter — participant, request log, webhooks.
-  ddp_engine/            Trust Graph entry, AA data ingestion, scoring adapter (thin —
-                         see docs/decisions/0002-ip-boundary.md).
-  portal_gateway/        BFF layer — role-aware composed API responses per frontend.
+  ddp_engine/            Placeholder (Phase 3) — Trust Graph entry, AA data ingestion,
+                         thin proprietary-scoring adapter. See spec §3.6.
+  portal_gateway/        Placeholder (Phase 4) — BFF layer, role-aware composed API
+                         responses per frontend.
 docker-compose.yml       Local dev bench: MariaDB, Redis, Frappe.
 docs/
   spec.md                Full technical specification (source of truth for scope).

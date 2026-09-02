@@ -1,0 +1,16 @@
+include MANIFEST.in
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include portal_gateway *.css
+recursive-include portal_gateway *.csv
+recursive-include portal_gateway *.html
+recursive-include portal_gateway *.js
+recursive-include portal_gateway *.json
+recursive-include portal_gateway *.md
+recursive-include portal_gateway *.png
+recursive-include portal_gateway *.py
+recursive-include portal_gateway *.svg
+recursive-include portal_gateway *.txt
+recursive-exclude portal_gateway *.pyc

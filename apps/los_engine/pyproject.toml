@@ -1,0 +1,15 @@
+[project]
+name = "los_engine"
+authors = [
+    { name = "Project K", email = "dev@projectk.example" }
+]
+description = "LOS core: Loan Lead, thin extensions over Frappe Lending's Loan Application, offer/eligibility tracking"
+requires-python = ">=3.10"
+dynamic = ["version"]
+dependencies = []
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.dev-dependencies]

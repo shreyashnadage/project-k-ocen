@@ -8,12 +8,16 @@
 #   docker compose up -d
 #   docker compose exec bench bash
 #     $ bench new-site ocen.localhost --admin-password admin --no-mariadb-socket
+#     $ bench get-app lending           # upstream Frappe Lending v16
+#     $ bench get-app crm               # upstream Frappe CRM (AGPL — see docs/spec.md §3.6)
 #     $ bench get-app identity_core /workspace/apps/identity_core
-#     $ bench get-app ocen_connector /workspace/apps/ocen_connector
 #     $ bench get-app los_engine /workspace/apps/los_engine
+#     $ bench get-app crm_extensions /workspace/apps/crm_extensions
+#     $ bench get-app ocen_connector /workspace/apps/ocen_connector
 #     $ bench get-app ddp_engine /workspace/apps/ddp_engine
 #     $ bench get-app portal_gateway /workspace/apps/portal_gateway
-#     $ bench --site ocen.localhost install-app identity_core ocen_connector los_engine ddp_engine portal_gateway
+#     # Install order matters — each app's hooks.py required_apps encodes it:
+#     $ bench --site ocen.localhost install-app identity_core lending crm los_engine crm_extensions ocen_connector ddp_engine portal_gateway
 #     $ bench start
 
 services:

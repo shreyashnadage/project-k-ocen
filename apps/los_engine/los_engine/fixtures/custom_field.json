@@ -1,0 +1,48 @@
+[
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-loan_lead",
+    "dt": "Loan Application",
+    "fieldname": "loan_lead",
+    "label": "Loan Lead",
+    "fieldtype": "Link",
+    "options": "Loan Lead",
+    "insert_after": "applicant",
+    "description": "The Loan Lead this application was converted from, if any."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-tenant_id",
+    "dt": "Loan Application",
+    "fieldname": "tenant_id",
+    "label": "Tenant",
+    "fieldtype": "Link",
+    "options": "Tenant",
+    "insert_after": "loan_lead",
+    "in_standard_filter": 1,
+    "description": "Row-level isolation key (spec §3.2B). Set automatically from the linked Loan Lead on creation — see los_engine.los_engine.doc_events.loan_application."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-performed_by_agent",
+    "dt": "Loan Application",
+    "fieldname": "performed_by_agent",
+    "label": "Performed By Agent",
+    "fieldtype": "Link",
+    "options": "User",
+    "insert_after": "tenant_id",
+    "read_only": 1,
+    "description": "Set automatically when a Field Agent creates/edits this record on the borrower's behalf (spec §4.3 proxy-action pattern). Never set this from client-supplied data."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-fldg_flag",
+    "dt": "Loan Application",
+    "fieldname": "fldg_flag",
+    "label": "FLDG Cover",
+    "fieldtype": "Check",
+    "default": "0",
+    "insert_after": "performed_by_agent",
+    "description": "CGTMSE and FLDG are mutually exclusive (spec §1.4) — checked against OCEN Offer.cgtmse_flag in ocen_connector."
+  }
+]
