@@ -1,0 +1,16 @@
+include MANIFEST.in
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include identity_core *.css
+recursive-include identity_core *.csv
+recursive-include identity_core *.html
+recursive-include identity_core *.js
+recursive-include identity_core *.json
+recursive-include identity_core *.md
+recursive-include identity_core *.png
+recursive-include identity_core *.py
+recursive-include identity_core *.svg
+recursive-include identity_core *.txt
+recursive-exclude identity_core *.pyc

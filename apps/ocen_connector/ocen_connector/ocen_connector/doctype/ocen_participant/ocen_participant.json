@@ -1,0 +1,92 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Participant",
+  "module": "OCEN Connector",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "field:participant_code",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "engine": "InnoDB",
+  "description": "Directory of OCEN network participants this platform interacts with: exactly one row with is_self=1 representing this platform's own LA identity, plus one row per subscribed lender. Credentials for the self row live in OCEN Settings, not here.",
+  "fields": [
+    {
+      "fieldname": "participant_code",
+      "label": "Participant Code",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "participant_name",
+      "label": "Participant Name",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "participant_role",
+      "label": "Role",
+      "fieldtype": "Select",
+      "options": "LA\nLender\nDDP",
+      "reqd": 1,
+      "default": "Lender",
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "is_self",
+      "label": "Is Self (this platform's LA identity)",
+      "fieldtype": "Check",
+      "default": "0"
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Active\nInactive",
+      "default": "Active",
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "product_networks",
+      "label": "Registered Product Networks",
+      "fieldtype": "Small Text",
+      "description": "Comma-separated OCEN product network codes this participant is registered under."
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1
+    },
+    {
+      "role": "LOS User",
+      "read": 1
+    }
+  ]
+}

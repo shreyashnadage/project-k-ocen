@@ -1,0 +1,59 @@
+[
+  {
+    "doctype": "Role",
+    "name": "Borrower",
+    "role_name": "Borrower",
+    "desk_access": 0,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "Field Agent",
+    "role_name": "Field Agent",
+    "desk_access": 1,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "CRM User",
+    "role_name": "CRM User",
+    "desk_access": 1,
+    "disabled": 0,
+    "description": "Owned here even though it is also used by the crm app's Frappe CRM fork, so identity_core's fixture import order never depends on crm being installed first — identity_core is the auth source of truth per spec §3.3."
+  },
+  {
+    "doctype": "Role",
+    "name": "Underwriter",
+    "role_name": "Underwriter",
+    "desk_access": 1,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "LOS User",
+    "role_name": "LOS User",
+    "desk_access": 1,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "DDP User",
+    "role_name": "DDP User",
+    "desk_access": 1,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "Lender Portal User",
+    "role_name": "Lender Portal User",
+    "desk_access": 0,
+    "disabled": 0
+  },
+  {
+    "doctype": "Role",
+    "name": "Anchor Portal User",
+    "role_name": "Anchor Portal User",
+    "desk_access": 0,
+    "disabled": 0
+  }
+]

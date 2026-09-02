@@ -1,0 +1,125 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Loan Application",
+  "module": "OCEN Connector",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "format:OCEN-APP-{#####}",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "Linked 1:1 to los_engine's Loan Application. Tracks the OCEN 4.0 async journey stage (spec §6.2, §6.3). This DocType is written to by the webhook receivers in ocen_connector.api.webhooks, not directly by end users.",
+  "fields": [
+    {
+      "fieldname": "loan_application",
+      "label": "Loan Application",
+      "fieldtype": "Link",
+      "options": "Loan Application",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "tenant_id",
+      "label": "Tenant",
+      "fieldtype": "Link",
+      "options": "Tenant",
+      "in_standard_filter": 1,
+      "description": "Row-level isolation key (spec §3.2B) — mirrors the linked Loan Application's tenant."
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "request_id",
+      "label": "Request ID",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1,
+      "description": "requestId sent on the initiating POST /v4/loanApplications call."
+    },
+    {
+      "fieldname": "ocen_application_id",
+      "label": "OCEN Application ID",
+      "fieldtype": "Data",
+      "description": "application_id assigned by the OCEN network once acknowledged."
+    },
+    {
+      "fieldname": "ocen_stage",
+      "label": "OCEN Stage",
+      "fieldtype": "Select",
+      "options": "Draft\nSubmitted\nAcknowledged\nOffers Received\nOffer Accepted\nKYC In Progress\nAgreement Signed\nRepayment Plan Finalized\nDisbursement Triggered\nDisbursed\nRejected\nFailed",
+      "default": "Draft",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "participant",
+      "label": "OCEN Participant (self)",
+      "fieldtype": "Link",
+      "options": "OCEN Participant"
+    },
+    {
+      "fieldname": "submitted_on",
+      "label": "Submitted On",
+      "fieldtype": "Datetime"
+    },
+    {
+      "fieldname": "last_status_update",
+      "label": "Last Status Update",
+      "fieldtype": "Datetime"
+    },
+    {
+      "fieldname": "section_break_2",
+      "label": "Last Webhook Payload (debugging)",
+      "fieldtype": "Section Break",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "raw_last_webhook_payload",
+      "label": "Raw Last Webhook Payload",
+      "fieldtype": "Code",
+      "options": "JSON",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "LOS User",
+      "read": 1,
+      "write": 1
+    }
+  ]
+}

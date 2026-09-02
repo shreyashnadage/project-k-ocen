@@ -1,0 +1,119 @@
+{
+  "doctype": "DocType",
+  "name": "Tenant",
+  "module": "Identity Core",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "is_tree": 1,
+  "nsm_parent_field": "parent_tenant",
+  "autoname": "field:tenant_code",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "Tenant registry and org hierarchy for the pooled multi-tenant population (spec §3.2B): Clusters and Anchors. Lender tenants are site-isolated (§3.2A) and are NOT registered here. tenant_code is the value stored in tenant_id fields across other apps' DocTypes for row-level isolation via Frappe User Permission.",
+  "fields": [
+    {
+      "fieldname": "tenant_name",
+      "label": "Tenant Name",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "tenant_code",
+      "label": "Tenant Code",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "unique": 1,
+      "in_list_view": 1,
+      "description": "Short stable code, e.g. ZANVAR, KOLHAPUR-SANGLI-SATARA. Used as the tenant_id value on other apps' DocTypes."
+    },
+    {
+      "fieldname": "tenant_type",
+      "label": "Tenant Type",
+      "fieldtype": "Select",
+      "options": "Cluster\nAnchor\nInternal",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "parent_tenant",
+      "label": "Parent Tenant",
+      "fieldtype": "Link",
+      "options": "Tenant",
+      "description": "Anchors sit under a Cluster tenant; Clusters are top-level."
+    },
+    {
+      "fieldname": "is_group",
+      "label": "Is Group (Cluster Node)",
+      "fieldtype": "Check",
+      "default": "0"
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Active\nInactive",
+      "default": "Active",
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "region",
+      "label": "Region",
+      "fieldtype": "Data",
+      "description": "e.g. Kolhapur–Sangli–Satara, Pune, Chakan, Aurangabad, Nashik"
+    },
+    {
+      "fieldname": "notes",
+      "label": "Notes",
+      "fieldtype": "Small Text"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Field Agent",
+      "read": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1
+    },
+    {
+      "role": "DDP User",
+      "read": 1
+    },
+    {
+      "role": "Anchor Portal User",
+      "read": 1
+    }
+  ]
+}

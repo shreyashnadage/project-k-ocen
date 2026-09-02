@@ -1,0 +1,99 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Settings",
+  "module": "OCEN Connector",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 1,
+  "engine": "InnoDB",
+  "description": "OAuth2 client credentials + signing key for the OCEN Registry (spec §6.4). Secrets use Frappe's encrypted Password fieldtype — never stored in plaintext config. Test against the OCEN sandbox before switching environment to Production.",
+  "fields": [
+    {
+      "fieldname": "environment",
+      "label": "Environment",
+      "fieldtype": "Select",
+      "options": "Sandbox\nProduction",
+      "default": "Sandbox",
+      "reqd": 1
+    },
+    {
+      "fieldname": "registry_base_url",
+      "label": "OCEN Registry Base URL",
+      "fieldtype": "Data",
+      "reqd": 1
+    },
+    {
+      "fieldname": "token_url",
+      "label": "OAuth2 Token URL",
+      "fieldtype": "Data",
+      "reqd": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "la_participant_id",
+      "label": "LA Participant ID",
+      "fieldtype": "Data",
+      "description": "This platform's own registered Loan Agent participant ID on the OCEN network."
+    },
+    {
+      "fieldname": "client_id",
+      "label": "OAuth2 Client ID",
+      "fieldtype": "Data",
+      "reqd": 1
+    },
+    {
+      "fieldname": "section_break_secrets",
+      "label": "Secrets",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "client_secret",
+      "label": "OAuth2 Client Secret",
+      "fieldtype": "Password",
+      "reqd": 1
+    },
+    {
+      "fieldname": "jws_signing_key",
+      "label": "JWS Signing Key (PEM)",
+      "fieldtype": "Password",
+      "description": "Private key used to sign outbound requests per the OCEN request-signing spec."
+    },
+    {
+      "fieldname": "section_break_cache",
+      "label": "Cached Token (read-only, managed by the adapter)",
+      "fieldtype": "Section Break",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "cached_access_token",
+      "label": "Cached Access Token",
+      "fieldtype": "Password",
+      "read_only": 1
+    },
+    {
+      "fieldname": "token_expires_at",
+      "label": "Token Expires At",
+      "fieldtype": "Datetime",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+include MANIFEST.in
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ocen_connector *.css
+recursive-include ocen_connector *.csv
+recursive-include ocen_connector *.html
+recursive-include ocen_connector *.js
+recursive-include ocen_connector *.json
+recursive-include ocen_connector *.md
+recursive-include ocen_connector *.png
+recursive-include ocen_connector *.py
+recursive-include ocen_connector *.svg
+recursive-include ocen_connector *.txt
+recursive-exclude ocen_connector *.pyc

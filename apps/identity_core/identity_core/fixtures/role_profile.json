@@ -1,0 +1,52 @@
+[
+  {
+    "doctype": "Role Profile",
+    "name": "Borrower",
+    "role_profile": "Borrower",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "Borrower"}
+    ]
+  },
+  {
+    "doctype": "Role Profile",
+    "name": "Field Agent",
+    "role_profile": "Field Agent",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "Field Agent"},
+      {"doctype": "Has Role", "parentfield": "roles", "role": "CRM User"}
+    ]
+  },
+  {
+    "doctype": "Role Profile",
+    "name": "Credit Ops",
+    "role_profile": "Credit Ops",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "Underwriter"},
+      {"doctype": "Has Role", "parentfield": "roles", "role": "LOS User"}
+    ]
+  },
+  {
+    "doctype": "Role Profile",
+    "name": "DDP Analyst",
+    "role_profile": "DDP Analyst",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "DDP User"}
+    ]
+  },
+  {
+    "doctype": "Role Profile",
+    "name": "Lender Reviewer",
+    "role_profile": "Lender Reviewer",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "Lender Portal User"}
+    ]
+  },
+  {
+    "doctype": "Role Profile",
+    "name": "Anchor Admin",
+    "role_profile": "Anchor Admin",
+    "roles": [
+      {"doctype": "Has Role", "parentfield": "roles", "role": "Anchor Portal User"}
+    ]
+  }
+]

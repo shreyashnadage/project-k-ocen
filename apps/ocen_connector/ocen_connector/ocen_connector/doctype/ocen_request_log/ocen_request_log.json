@@ -1,0 +1,110 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Request Log",
+  "module": "OCEN Connector",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "hash",
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "engine": "InnoDB",
+  "description": "Every outbound OCEN API call and inbound response/webhook, for audit and debugging of the async state machine (spec §6.2, §8 auditability). Append-only — no delete permission except System Manager.",
+  "fields": [
+    {
+      "fieldname": "direction",
+      "label": "Direction",
+      "fieldtype": "Select",
+      "options": "Outbound\nInbound",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "endpoint",
+      "label": "Endpoint",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "request_id",
+      "label": "Request ID",
+      "fieldtype": "Data",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "ocen_loan_application",
+      "label": "OCEN Loan Application",
+      "fieldtype": "Link",
+      "options": "OCEN Loan Application",
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "http_status",
+      "label": "HTTP Status",
+      "fieldtype": "Int",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "logged_at",
+      "label": "Logged At",
+      "fieldtype": "Datetime",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "error",
+      "label": "Error",
+      "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "section_break_1",
+      "label": "Payloads",
+      "fieldtype": "Section Break",
+      "collapsible": 1
+    },
+    {
+      "fieldname": "payload",
+      "label": "Request Payload",
+      "fieldtype": "Code",
+      "options": "JSON"
+    },
+    {
+      "fieldname": "response_payload",
+      "label": "Response / Webhook Payload",
+      "fieldtype": "Code",
+      "options": "JSON"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1
+    },
+    {
+      "role": "DDP User",
+      "read": 1
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Offer",
+  "module": "OCEN Connector",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "format:OCEN-OFR-{#####}",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "One row per responding lender per application (spec §6.2). CGTMSE and FLDG are mutually exclusive per spec §1.4 — do not also set an FLDG flag on the same underlying loan when cgtmse_flag is set here.",
+  "fields": [
+    {
+      "fieldname": "ocen_loan_application",
+      "label": "OCEN Loan Application",
+      "fieldtype": "Link",
+      "options": "OCEN Loan Application",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "offer_id",
+      "label": "Offer ID",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "in_list_view": 1,
+      "description": "offer_id as assigned by the responding lender/OCEN network."
+    },
+    {
+      "fieldname": "lender",
+      "label": "Lender",
+      "fieldtype": "Link",
+      "options": "OCEN Participant",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "offer_status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Received\nPresented to Borrower\nAccepted\nRejected\nExpired",
+      "default": "Received",
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "amount",
+      "label": "Amount",
+      "fieldtype": "Currency",
+      "reqd": 1
+    },
+    {
+      "fieldname": "interest_rate",
+      "label": "Interest Rate (% p.a.)",
+      "fieldtype": "Percent",
+      "reqd": 1
+    },
+    {
+      "fieldname": "tenure_months",
+      "label": "Tenure (months)",
+      "fieldtype": "Int",
+      "reqd": 1
+    },
+    {
+      "fieldname": "processing_fee",
+      "label": "Processing Fee",
+      "fieldtype": "Currency"
+    },
+    {
+      "fieldname": "cgtmse_flag",
+      "label": "CGTMSE Cover",
+      "fieldtype": "Check",
+      "default": "0"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "received_on",
+      "label": "Received On",
+      "fieldtype": "Datetime"
+    },
+    {
+      "fieldname": "raw_offer_payload",
+      "label": "Raw Offer Payload",
+      "fieldtype": "Code",
+      "options": "JSON",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "LOS User",
+      "read": 1,
+      "write": 1
+    }
+  ]
+}
