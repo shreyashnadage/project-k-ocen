@@ -63,6 +63,28 @@
       "fieldtype": "Small Text"
     },
     {
+      "fieldname": "section_break_applicant",
+      "label": "Applicant (Borrower) Contact Details",
+      "fieldtype": "Section Break",
+      "description": "Field names deliberately match Frappe Lending's Loan Application applicant_* fields for direct passthrough on conversion."
+    },
+    {
+      "fieldname": "applicant_name",
+      "label": "Applicant Name",
+      "fieldtype": "Data"
+    },
+    {
+      "fieldname": "applicant_phone_number",
+      "label": "Applicant Phone Number",
+      "fieldtype": "Phone"
+    },
+    {
+      "fieldname": "applicant_email_address",
+      "label": "Applicant Email Address",
+      "fieldtype": "Data",
+      "options": "Email"
+    },
+    {
       "fieldname": "column_break_2",
       "fieldtype": "Column Break"
     },
@@ -81,6 +103,13 @@
       "options": "Loan Application",
       "read_only": 1,
       "description": "Set once this lead is converted (status = Converted)."
+    },
+    {
+      "fieldname": "eligibility_notes",
+      "label": "Eligibility Check Notes",
+      "fieldtype": "Small Text",
+      "read_only": 1,
+      "description": "Reasons from the last run_eligibility_check() call. Pre-screening only — never a credit decision (spec §1.4, §2.2); the lender's D4 underwriting is out of scope for this platform."
     }
   ],
   "permissions": [

@@ -78,6 +78,29 @@
       "fieldname": "notes",
       "label": "Notes",
       "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "lft",
+      "label": "Left",
+      "fieldtype": "Int",
+      "read_only": 1,
+      "hidden": 1,
+      "no_copy": 1
+    },
+    {
+      "fieldname": "rgt",
+      "label": "Right",
+      "fieldtype": "Int",
+      "read_only": 1,
+      "hidden": 1,
+      "no_copy": 1
+    },
+    {
+      "fieldname": "old_parent",
+      "label": "Old Parent",
+      "fieldtype": "Link",
+      "options": "Tenant",
+      "hidden": 1
     }
   ],
   "permissions": [
