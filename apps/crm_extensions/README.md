@@ -23,16 +23,17 @@ Never modify Frappe CRM core (it's AGPL — spec §3.6). Extend only via:
   record `Anchor Admin`'s scope in §4.1 ("their own vendor list and
   attestation records only") refers to.
 
-## Known gap — needs a User Permission, not just DocType Permission
+## Anchor row-level isolation
 
-`Vendor Attestation`'s DocType Permissions (in `vendor_attestation.json`)
-grant `Anchor Portal User` read/write/create — but that alone lets any
-Anchor see every anchor's attestation records, not just their own. Per spec
-§4.2, row-level restriction to "their own" requires a **User Permission**
-record linking each Anchor Portal User to their specific `CRM Organization`
-row (`allow: "CRM Organization"`), the same mechanism used for tenant
-isolation elsewhere. Not yet set up as a fixture — needs real anchor user
-accounts to exist first.
+`Vendor Attestation`'s DocType Permissions alone would let any Anchor
+Portal User see every anchor's attestation records, not just their own.
+Fixed via `doc_events/crm_organization.py`: setting `CRM
+Organization.portal_user` (a Link to User, shown when `is_anchor` is
+checked) automatically creates a **User Permission** scoping that user to
+that one `CRM Organization` row — the same row-level mechanism used for
+tenant isolation elsewhere (spec §4.2). Changing or clearing `portal_user`
+removes the stale permission. Granting the `Anchor Portal User` role by
+itself does **not** scope anything — always go through `portal_user`.
 
 ## Requires
 

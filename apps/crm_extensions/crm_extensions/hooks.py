@@ -19,9 +19,23 @@ fixtures = [
 # Vendor lead pipeline: Field Agents create/edit CRM Lead records on behalf
 # of vendors who are present but not operating the system themselves —
 # same proxy-action pattern as los_engine's Loan Application (spec §4.3).
+# NOTE on the module path below: doc_events/ sits directly under the app
+# package (apps/crm_extensions/crm_extensions/doc_events/), one level
+# shallower than los_engine's equivalent (which nests it inside that app's
+# module subfolder) — so the import path here is "crm_extensions.doc_events.*",
+# not "crm_extensions.crm_extensions.doc_events.*". Getting this wrong is a
+# silent failure: Frappe only imports the handler when the hook actually
+# fires, so a bad path here does not surface until something inserts/saves
+# a CRM Lead or CRM Organization — as happened here (ADR 0003 follow-up).
 doc_events = {
     "CRM Lead": {
-        "before_insert": "crm_extensions.crm_extensions.doc_events.crm_lead.before_insert",
-        "before_save": "crm_extensions.crm_extensions.doc_events.crm_lead.before_save",
-    }
+        "before_insert": "crm_extensions.doc_events.crm_lead.before_insert",
+        "before_save": "crm_extensions.doc_events.crm_lead.before_save",
+    },
+    # Row-level isolation for Anchor Admin (spec §4.1, §4.2) — see
+    # doc_events/crm_organization.py for why this exists.
+    "CRM Organization": {
+        "after_insert": "crm_extensions.doc_events.crm_organization.after_insert",
+        "on_update": "crm_extensions.doc_events.crm_organization.on_update",
+    },
 }

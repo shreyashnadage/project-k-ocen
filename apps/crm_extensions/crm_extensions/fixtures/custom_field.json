@@ -22,6 +22,17 @@
   },
   {
     "doctype": "Custom Field",
+    "name": "CRM Organization-portal_user",
+    "dt": "CRM Organization",
+    "fieldname": "portal_user",
+    "label": "Anchor Portal User",
+    "fieldtype": "Link",
+    "options": "User",
+    "depends_on": "eval:doc.is_anchor",
+    "description": "The Anchor Admin user account for this anchor. Setting this automatically creates/updates a User Permission scoping that user to this anchor's own records only (spec §4.1, §4.2) — see doc_events/crm_organization.py. Do not grant Anchor Portal User role without going through this field; a role alone does not scope which anchor's data is visible."
+  },
+  {
+    "doctype": "Custom Field",
     "name": "CRM Lead-tenant_id",
     "dt": "CRM Lead",
     "fieldname": "tenant_id",
