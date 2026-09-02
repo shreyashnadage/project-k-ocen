@@ -62,6 +62,17 @@
       "description": "Private key used to sign outbound requests per the OCEN request-signing spec."
     },
     {
+      "fieldname": "section_break_verify",
+      "label": "Inbound Webhook Verification",
+      "fieldtype": "Section Break"
+    },
+    {
+      "fieldname": "registry_public_key",
+      "label": "OCEN Registry Public Key (PEM)",
+      "fieldtype": "Long Text",
+      "description": "Not a secret — this is the OCEN Registry's public key, used to verify the detached JWS signature on inbound webhooks (spec §6.4). Confirm the exact header name/JWS format against real OCEN webhook docs before production use — this app assumes the X-Jws-Signature header carrying an RFC 7515 Appendix F detached-content JWS, matching the Account Aggregator/ReBIT convention OCEN's ecosystem generally follows, but this has not been confirmed against actual OCEN sandbox traffic."
+    },
+    {
       "fieldname": "section_break_cache",
       "label": "Cached Token (read-only, managed by the adapter)",
       "fieldtype": "Section Break",

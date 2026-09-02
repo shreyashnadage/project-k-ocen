@@ -44,12 +44,14 @@ class OCENSettings(Document):
 		return token
 
 	def sign_request(self, payload: dict) -> str:
-		"""Sign a request payload as a JWS per the OCEN spec. Stub — wire up the
-		exact JWS header/claims shape once sandbox docs are confirmed (spec §6.5).
+		"""Sign a request payload as a detached JWS (spec §6.4), matching the
+		format `ocen_connector.utils.jws.verify_detached_jws` expects on
+		inbound webhooks — see that module's docstring for the same caveat:
+		not yet confirmed against real OCEN sandbox traffic (spec §6.5).
 		"""
-		import jwt as pyjwt
+		from ocen_connector.utils.jws import sign_detached_jws
 
 		signing_key = self.get_password("jws_signing_key")
 		if not signing_key:
 			frappe.throw("JWS signing key not configured in OCEN Settings.")
-		return pyjwt.encode(payload, signing_key, algorithm="RS256")
+		return sign_detached_jws(frappe.as_json(payload).encode("utf-8"), signing_key)

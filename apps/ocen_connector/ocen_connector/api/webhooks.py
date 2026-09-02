@@ -8,10 +8,9 @@ acknowledgement, and the real result arrives later via one of these
 webhooks. Every call in and out is logged to OCEN Request Log regardless of
 outcome, per spec §8 auditability.
 
-TODO before sandbox testing (spec §6.5): verify the exact JWS signature
-header OCEN webhooks carry and enforce verification in `_verify_signature`
-below — this stub accepts unsigned payloads, which is only acceptable
-against a sandbox that has no adversarial traffic, never in production.
+Signature header/JWS shape (spec §6.5) is not yet confirmed against real
+OCEN sandbox traffic — see ocen_connector/utils/jws.py's docstring before
+relying on this in anything beyond dev.
 """
 
 import frappe
@@ -19,22 +18,47 @@ import frappe
 from ocen_connector.ocen_connector.doctype.ocen_request_log.ocen_request_log import (
 	OCENRequestLog,
 )
+from ocen_connector.utils.jws import SignatureVerificationError, verify_detached_jws
+
+SIGNATURE_HEADER = "X-Jws-Signature"
 
 
-def _verify_signature(request) -> bool:
+def _verify_signature(request) -> dict:
+	"""Verifies the inbound webhook's detached JWS and returns the payload
+	parsed from the exact bytes that were verified — never re-parse the
+	body separately afterward, or a signed-vs-used mismatch becomes
+	possible.
+
+	Sandbox with no signature header present is allowed through unverified
+	(logged as a warning) so the webhook flow can be exercised before real
+	OCEN sandbox credentials/signing exist. A signature header that IS
+	present is always verified, even in Sandbox — if a sandbox partner
+	signs its calls, we should be checking them. Production always
+	requires a valid signature.
+	"""
 	settings = frappe.get_single("OCEN Settings")
-	if settings.environment == "Sandbox":
-		return True
-	# TODO: verify JWS signature on the webhook payload against the OCEN
-	# Registry's published public key before trusting it in Production.
-	frappe.throw("Production webhook signature verification is not implemented yet.")
+	raw_body = request.get_data()
+	signature_header = request.headers.get(SIGNATURE_HEADER)
+
+	if not signature_header:
+		if settings.environment == "Sandbox":
+			frappe.logger("ocen_connector").warning(
+				f"Webhook received with no {SIGNATURE_HEADER} header — allowed "
+				"because environment is Sandbox. This must never happen in Production."
+			)
+			return frappe.parse_json(raw_body)
+		frappe.throw(f"Missing {SIGNATURE_HEADER} header.", frappe.PermissionError)
+
+	try:
+		return verify_detached_jws(raw_body, signature_header, settings.registry_public_key)
+	except SignatureVerificationError as exc:
+		frappe.throw(f"Webhook signature verification failed: {exc}", frappe.PermissionError)
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 def loan_application_status():
 	"""Callback target for `loanApplicationStatus` — spec §6.3 stage 1."""
-	_verify_signature(frappe.request)
-	payload = frappe.request.get_json(force=True)
+	payload = _verify_signature(frappe.request)
 	request_id = payload.get("requestId")
 
 	log = OCENRequestLog.record(
@@ -65,8 +89,7 @@ def offer_response():
 	"""Callback target for `offerResponse` — spec §6.3 stage 2. Creates or
 	updates the OCEN Offer for the responding lender.
 	"""
-	_verify_signature(frappe.request)
-	payload = frappe.request.get_json(force=True)
+	payload = _verify_signature(frappe.request)
 	request_id = payload.get("requestId")
 
 	log = OCENRequestLog.record(
