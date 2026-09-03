@@ -22,6 +22,14 @@ explicitly (Desk console, or a future setup-wizard step) instead, and
 replace the placeholder values below with the real ones before relying on
 this in anything beyond a dev bench.
 
+This also includes a POC-ONLY placeholder Loan Demand Offset Order for
+Loan Product's mandatory collection-offset-sequence fields (RBI IRAC asset
+classification collection policy) — tracked as an open decision in
+docs/compliance-questions.md #1, not silently treated as settled. Building
+this POC intentionally proceeds past that open question rather than
+blocking on it (founder direction); real values are still needed before
+anything here leaves POC.
+
 Company creation goes through ERPNext's own setup-wizard completion
 function (`erpnext.setup.setup_wizard.setup_wizard.setup_complete`), not a
 bare `frappe.get_doc({"doctype": "Company", ...}).insert()` — a bare
@@ -39,6 +47,7 @@ import frappe
 PLACEHOLDER_COMPANY = "Project K"
 PLACEHOLDER_COMPANY_ABBR = "PK"
 PLACEHOLDER_LOAN_PRODUCT = "Vendor Receivables Financing"
+POC_OFFSET_ORDER_TITLE = "POC-ONLY Collection Offset Order — NOT a real collection policy"
 
 
 @frappe.whitelist()
@@ -79,25 +88,49 @@ def _ensure_company() -> str:
 	return frappe.db.exists("Company", {"company_name": PLACEHOLDER_COMPANY})
 
 
+def _ensure_poc_offset_order() -> str:
+	"""POC-ONLY placeholder, not a real collection policy — see
+	docs/compliance-questions.md #1. Real values need lending/credit/
+	compliance sign-off before this leaves POC (ADR 0004). Uses a plain
+	EMI-first-then-Charges ordering with no basis beyond "something that
+	lets the POC create a Loan Application" — do not treat this as
+	representing any actual decision about how Project K will sequence
+	collections against principal/interest/penalty for delinquent loans.
+	"""
+	existing = frappe.db.exists("Loan Demand Offset Order", {"title": POC_OFFSET_ORDER_TITLE})
+	if existing:
+		return existing
+
+	order = frappe.get_doc(
+		{
+			"doctype": "Loan Demand Offset Order",
+			"title": POC_OFFSET_ORDER_TITLE,
+			"components": [
+				{"demand_type": "EMI (Principal + Interest)"},
+				{"demand_type": "Additional Interest"},
+				{"demand_type": "Penalty"},
+				{"demand_type": "Charges"},
+			],
+		}
+	)
+	order.insert(ignore_permissions=True)
+	return order.name
+
+
 def _ensure_loan_product(company_name: str) -> str:
-	"""KNOWN BLOCKER, deliberately not worked around here: Frappe Lending's
-	Loan Product also requires `collection_offset_sequence_for_standard_asset`
-	and `collection_offset_sequence_for_sub_standard_asset` — Links to a
-	"Loan Demand Offset Sequence" doctype governing how a payment gets
-	allocated across principal/interest/penalty once a loan is delinquent,
-	mapped to RBI IRAC asset-classification tiers (Standard / Sub-Standard /
-	Doubtful / Loss). That is a real collection-policy decision for the
-	lending/credit/compliance side of the business, not something to
-	fabricate a plausible-looking value for here — a wrong guess here would
-	silently encode a collection policy nobody actually decided on. This
-	call will fail with a clear `ValidationError` from Frappe Lending until
-	those sequences are configured for real (see ADR 0004).
+	"""Uses the POC-ONLY offset order above for both the standard and
+	sub-standard asset tiers — see docs/compliance-questions.md #1 and ADR
+	0004. Replace with real, distinct sequences per tier before this leaves
+	POC; do not read anything into the fact both tiers currently point at
+	the same placeholder.
 	"""
 	existing = frappe.db.exists(
 		"Loan Product", {"product_name": PLACEHOLDER_LOAN_PRODUCT, "company": company_name}
 	)
 	if existing:
 		return existing
+
+	offset_order = _ensure_poc_offset_order()
 
 	product = frappe.get_doc(
 		{
@@ -107,6 +140,8 @@ def _ensure_loan_product(company_name: str) -> str:
 			"company": company_name,
 			"rate_of_interest": 18.0,
 			"is_term_loan": 1,
+			"collection_offset_sequence_for_standard_asset": offset_order,
+			"collection_offset_sequence_for_sub_standard_asset": offset_order,
 		}
 	)
 	product.insert(ignore_permissions=True)

@@ -122,6 +122,9 @@ class LoanLead(Document):
 				"applicant_phone_number": self.applicant_phone_number,
 				"applicant_email_address": self.applicant_email_address,
 				"posting_date": frappe.utils.today(),
+				"is_term_loan": 1,
+				"repayment_method": "Repay Over Number of Periods",
+				"repayment_periods": self.requested_tenure_months or 12,
 			}
 		)
 		application.insert(ignore_permissions=True)

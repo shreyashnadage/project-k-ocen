@@ -44,22 +44,23 @@ v16 — install this app on the bench before `los_engine`).
 
 ## Verified end-to-end against the live dev bench (ADR 0003, ADR 0004)
 
-`run_eligibility_check()`'s Ineligible/Eligible transitions, the anchor
-Vendor Attestation check, and `convert_to_application()`'s blocking of
-non-Eligible leads are all confirmed working. `convert_to_application()`
-itself is implemented correctly for everything in this app's control —
-verified up to the point where Frappe Lending's `Loan Product` correctly
-demands real collection-policy configuration (RBI IRAC offset sequences)
-that doesn't exist yet. That is a genuine business/compliance decision,
-not a bug — see ADR 0004 before trying to "fix" it by fabricating values.
+The full flow — Loan Lead creation → `run_eligibility_check()`
+(Ineligible/Eligible transitions, the anchor Vendor Attestation check) →
+`convert_to_application()` (blocked for non-Eligible leads;
+succeeds for Eligible ones, creating a real Frappe Lending `Loan
+Application` with its applicant `Customer` auto-created correctly) — is
+confirmed working, using the POC-only placeholder Company/Loan
+Product/collection-offset-order from `setup.py`. See ADR 0004's update and
+`docs/compliance-questions.md` before touching those placeholders.
 
 ## Not yet built
 
 - Real per-lender product bounds for the eligibility check (currently a
   hardcoded ₹2–10 lakh placeholder band, `MIN_LOAN_AMOUNT`/
   `MAX_LOAN_AMOUNT` in `loan_lead.py`).
-- Real Loan Demand Offset Sequences, Loan Product terms, and Company
-  details to replace the placeholders in `setup.py` (ADR 0004) — needs
+- Real Loan Demand Offset Sequences, Loan Product terms, Company details,
+  and loan tenure defaults to replace the POC placeholders in `setup.py`
+  and `loan_lead.py` (ADR 0004, `docs/compliance-questions.md`) — needs
   lending/credit/compliance input, not more coding.
 - The `CRM Lead` doctype `vendor_lead` links to is owned by the
   `crm_extensions` app (extending upstream Frappe CRM) — see that app's

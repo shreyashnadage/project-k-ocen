@@ -85,6 +85,12 @@
       "options": "Email"
     },
     {
+      "fieldname": "requested_tenure_months",
+      "label": "Requested Tenure (months)",
+      "fieldtype": "Int",
+      "description": "Passed through to Loan Application on conversion. If unset, convert_to_application() falls back to a 12-month default."
+    },
+    {
       "fieldname": "column_break_2",
       "fieldtype": "Column Break"
     },
