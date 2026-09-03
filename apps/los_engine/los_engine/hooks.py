@@ -10,7 +10,14 @@ app_license = "mit"
 # state from Fineract. This app's own doctypes are limited to what Frappe
 # Lending does not model (Loan Lead, the pre-application stage) plus custom
 # fields/hooks layered onto Lending's own doctypes.
-required_apps = ["frappe", "identity_core", "lending"]
+#
+# `crm` (upstream Frappe CRM) is a dependency too — Loan Lead.vendor_lead
+# links to its CRM Lead doctype, and this app listens for CRM Lead status
+# changes to auto-create the handoff Loan Lead (doc_events below). This
+# app owns that handoff, not crm_extensions, because it's a Loan Lead
+# (a los_engine concept) being created — crm_extensions shouldn't need to
+# know los_engine's schema.
+required_apps = ["frappe", "identity_core", "lending", "crm"]
 
 # Custom Field fixtures added onto Frappe Lending's Loan Application —
 # tenant_id (row-level isolation, §3.2B), performed_by_agent (proxy-action
@@ -30,5 +37,11 @@ doc_events = {
     "Loan Application": {
         "before_insert": "los_engine.los_engine.doc_events.loan_application.before_insert",
         "before_save": "los_engine.los_engine.doc_events.loan_application.before_save",
-    }
+    },
+    # Vendor lead -> Loan Lead handoff: auto-creates a Loan Lead when a CRM
+    # Lead reaches the "Qualified" status, so a Field Agent doesn't have to
+    # remember to do it by hand. See doc_events/crm_lead.py.
+    "CRM Lead": {
+        "on_update": "los_engine.los_engine.doc_events.crm_lead.on_update",
+    },
 }

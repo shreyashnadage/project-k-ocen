@@ -39,9 +39,8 @@ itself does **not** scope anything — always go through `portal_user`.
 
 `identity_core`, `crm` (upstream Frappe CRM — install before this app).
 
-## Not yet built
+## Vendor lead → Loan Lead handoff
 
-Vendor lead → Loan Lead handoff (los_engine's `Loan Lead.vendor_lead`
-already links to `CRM Lead`; nothing here creates that link automatically
-yet — likely a `doc_events` hook on `CRM Lead` status change, once the
-lead-qualification flow is designed).
+Owned by `los_engine`, not this app (it creates a `Loan Lead`, a los_engine
+concept) — see `los_engine/doc_events/crm_lead.py`. Triggers automatically
+when a `CRM Lead` reaches Frappe CRM's own `Qualified` status.

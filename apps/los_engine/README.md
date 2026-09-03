@@ -30,6 +30,14 @@ create a competing `Loan Application` doctype here.
   override, since Loan Application belongs to the `lending` app, not this
   one.
 
+- **doc_events on CRM Lead** (`los_engine/doc_events/crm_lead.py`) — the
+  vendor lead → Loan Lead handoff: auto-creates a `Loan Lead` (status
+  `New`, `requested_amount`/applicant fields left blank for a Field Agent
+  to fill in) when a `CRM Lead` reaches Frappe CRM's built-in `Qualified`
+  status. Idempotent (won't create a second one on a later save), and
+  safely skips (logs a warning, doesn't crash the CRM Lead's own save) if
+  `tenant_id` isn't set yet, since that's mandatory on Loan Lead. Requires
+  `crm` (upstream Frappe CRM) — added to `required_apps` for this reason.
 - **setup.py** (`los_engine/setup.py`) — `bootstrap_default_company_and_product()`,
   a whitelisted, explicitly-called (never automatic) function that
   provisions the ERPNext `Company` + Frappe Lending `Loan Product` that
@@ -39,8 +47,10 @@ create a competing `Loan Application` doctype here.
 
 ## Requires
 
-`identity_core` (Tenant, proxy-action helper) and `lending` (Frappe Lending
-v16 — install this app on the bench before `los_engine`).
+`identity_core` (Tenant, proxy-action helper), `lending` (Frappe Lending
+v16), and `crm` (upstream Frappe CRM — the vendor lead → Loan Lead
+handoff listens for its `CRM Lead` doctype). Install all three on the
+bench before `los_engine`.
 
 ## Verified end-to-end against the live dev bench (ADR 0003, ADR 0004)
 
