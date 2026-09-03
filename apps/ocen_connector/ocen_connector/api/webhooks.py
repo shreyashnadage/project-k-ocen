@@ -18,6 +18,7 @@ import frappe
 from ocen_connector.ocen_connector.doctype.ocen_request_log.ocen_request_log import (
 	OCENRequestLog,
 )
+from ocen_connector.utils import los_client
 from ocen_connector.utils.jws import SignatureVerificationError, verify_detached_jws
 
 SIGNATURE_HEADER = "X-Jws-Signature"
@@ -79,6 +80,7 @@ def loan_application_status():
 	new_stage = payload.get("status")
 	doc = frappe.get_doc("OCEN Loan Application", application_name)
 	doc.apply_webhook_stage(new_stage, payload)
+	los_client.notify_stage_change(doc.loan_application, doc.ocen_stage)
 
 	log.db_set("ocen_loan_application", application_name)
 	return {"status": "ok"}
@@ -118,7 +120,7 @@ def offer_response():
 		frappe.local.response.http_status_code = 422
 		return {"status": "unknown_lender"}
 
-	frappe.get_doc(
+	new_offer = frappe.get_doc(
 		{
 			"doctype": "OCEN Offer",
 			"ocen_loan_application": application_name,
@@ -133,11 +135,26 @@ def offer_response():
 			"received_on": frappe.utils.now_datetime(),
 			"raw_offer_payload": frappe.as_json(payload),
 		}
-	).insert(ignore_permissions=True)
+	)
+	new_offer.insert(ignore_permissions=True)
 
 	doc = frappe.get_doc("OCEN Loan Application", application_name)
 	if doc.ocen_stage in ("Submitted", "Acknowledged"):
 		doc.apply_webhook_stage("Offers Received", payload)
+
+	lender_name = frappe.db.get_value("OCEN Participant", lender_participant, "participant_name")
+	los_client.notify_offer(
+		doc.loan_application,
+		{
+			"ocen_offer_id": new_offer.name,
+			"lender_name": lender_name,
+			"amount": new_offer.amount,
+			"interest_rate": new_offer.interest_rate,
+			"tenure_months": new_offer.tenure_months,
+			"processing_fee": new_offer.processing_fee,
+			"offer_status": new_offer.offer_status,
+		},
+	)
 
 	log.db_set("ocen_loan_application", application_name)
 	return {"status": "ok"}

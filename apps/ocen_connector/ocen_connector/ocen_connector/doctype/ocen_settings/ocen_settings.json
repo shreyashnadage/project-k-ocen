@@ -89,18 +89,29 @@
       "label": "Token Expires At",
       "fieldtype": "Datetime",
       "read_only": 1
+    },
+    {
+      "fieldname": "section_break_los",
+      "label": "LOS Site Connection (ADR 0005)",
+      "fieldtype": "Section Break",
+      "description": "Used by the webhook receivers to push status/offer updates back to the LOS site after processing an inbound OCEN webhook, and to authenticate inbound calls from LOS (ocen_connector.api.integration). Shared-secret auth, not Frappe's User api_key/api_secret — see utils/shared_auth.py's docstring for why."
+    },
+    {
+      "fieldname": "los_site_url",
+      "label": "LOS Site Base URL",
+      "fieldtype": "Data",
+      "description": "e.g. http://localhost:8001 or the LOS site's real base URL."
+    },
+    {
+      "fieldname": "integration_shared_secret",
+      "label": "Integration Shared Secret",
+      "fieldtype": "Password",
+      "description": "Must match OCEN Integration Settings.integration_shared_secret on the LOS site exactly. Sent/checked via the X-Integration-Secret header in both directions."
     }
   ],
   "permissions": [
     {
       "role": "System Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1
-    },
-    {
-      "role": "Platform Admin",
       "read": 1,
       "write": 1,
       "create": 1,

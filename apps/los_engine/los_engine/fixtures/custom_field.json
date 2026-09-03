@@ -44,5 +44,27 @@
     "default": "0",
     "insert_after": "performed_by_agent",
     "description": "CGTMSE and FLDG are mutually exclusive (spec §1.4) — checked against OCEN Offer.cgtmse_flag in ocen_connector."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-ocen_request_id",
+    "dt": "Loan Application",
+    "fieldname": "ocen_request_id",
+    "label": "OCEN Request ID",
+    "fieldtype": "Data",
+    "read_only": 1,
+    "insert_after": "fldg_flag",
+    "description": "Set by los_engine.api.ocen_integration.submit_to_ocen() (ADR 0005) — the OCEN site's own record is the source of truth; this is a local mirror for LOS's own UI, not a Link across the site boundary."
+  },
+  {
+    "doctype": "Custom Field",
+    "name": "Loan Application-ocen_stage",
+    "dt": "Loan Application",
+    "fieldname": "ocen_stage",
+    "label": "OCEN Stage",
+    "fieldtype": "Data",
+    "read_only": 1,
+    "insert_after": "ocen_request_id",
+    "description": "Mirrors OCEN Loan Application.ocen_stage on the OCEN site. Updated by los_engine.api.ocen_integration.receive_ocen_stage_update() when the OCEN site pushes a change — this field is never the source of truth, just a cache for LOS's own UI."
   }
 ]

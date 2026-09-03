@@ -44,6 +44,19 @@ create a competing `Loan Application` doctype here.
   `Loan Application` cannot be created without. Goes through ERPNext's own
   setup-wizard completion function rather than a bare insert — see ADR
   0004 for why a bare insert doesn't work on a headlessly-installed bench.
+- **OCEN Integration Settings** (`doctype/ocen_integration_settings`) and
+  **`api/ocen_integration.py`** — this site's half of the LOS ↔ OCEN
+  standalone-site integration (ADR 0005): `submit_to_ocen()` hands a Loan
+  Application to the OCEN site; `receive_ocen_stage_update()`/
+  `receive_ocen_offer()` are called back by OCEN after it processes a real
+  webhook. Auth is a pre-shared secret (`utils/shared_auth.py`), not
+  Frappe's User `api_key`/`api_secret` — see ADR 0006 for why, and for the
+  real-HTTP proof this direction works (`notify_stage_change`/
+  `notify_offer` from the OCEN site landed correctly here).
+- **Loan Offer** (`doctype/loan_offer`) — this site's UI-facing mirror of
+  an OCEN offer (spec §5.3's "N lenders offered you a loan"), populated by
+  `receive_ocen_offer()`. `OCEN Loan Application`'s full protocol state
+  stays on the OCEN site; this is just enough for LOS's own UI.
 
 ## Requires
 

@@ -1,0 +1,42 @@
+{
+  "doctype": "DocType",
+  "name": "OCEN Integration Settings",
+  "module": "LOS Engine",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 1,
+  "engine": "InnoDB",
+  "description": "This site's connection to the standalone OCEN site (ADR 0005) — the mirror image of OCEN Settings' los_site_url/integration_shared_secret fields on the other side. Used by los_engine.api.ocen_integration.submit_to_ocen() to hand a Loan Application to OCEN, and to authenticate inbound calls from OCEN (receive_ocen_stage_update/receive_ocen_offer). Shared-secret auth, not Frappe's User api_key/api_secret — see utils/shared_auth.py's docstring for why.",
+  "fields": [
+    {
+      "fieldname": "ocen_site_url",
+      "label": "OCEN Site Base URL",
+      "fieldtype": "Data",
+      "reqd": 1,
+      "description": "e.g. http://localhost:8002 or the OCEN site's real base URL."
+    },
+    {
+      "fieldname": "integration_shared_secret",
+      "label": "Integration Shared Secret",
+      "fieldtype": "Password",
+      "reqd": 1,
+      "description": "Must match OCEN Settings.integration_shared_secret on the OCEN site exactly. Sent/checked via the X-Integration-Secret header in both directions."
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

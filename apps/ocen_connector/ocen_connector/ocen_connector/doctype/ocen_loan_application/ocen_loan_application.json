@@ -10,24 +10,30 @@
   "sort_order": "DESC",
   "track_changes": 1,
   "engine": "InnoDB",
-  "description": "Linked 1:1 to los_engine's Loan Application. Tracks the OCEN 4.0 async journey stage (spec §6.2, §6.3). This DocType is written to by the webhook receivers in ocen_connector.api.webhooks, not directly by end users.",
+  "description": "Tracks the OCEN 4.0 async journey stage for one LOS-side loan application (spec §6.2, §6.3). As of ADR 0005 this app runs on its own Frappe site, separate from the LOS — loan_application/tenant_id are plain strings, not Frappe Links, since the referenced records live in a different database. This DocType is written to by ocen_connector.api.integration (on submission) and ocen_connector.api.webhooks (on inbound OCEN callbacks), not directly by end users.",
   "fields": [
     {
       "fieldname": "loan_application",
-      "label": "Loan Application",
-      "fieldtype": "Link",
-      "options": "Loan Application",
+      "label": "LOS Loan Application ID",
+      "fieldtype": "Data",
       "reqd": 1,
       "unique": 1,
-      "in_list_view": 1
+      "in_list_view": 1,
+      "description": "The LOS site's Loan Application name/ID. No referential integrity across the site boundary — the API contract (ocen_connector.api.integration.submit_loan_application) is what keeps this correct, not the database."
     },
     {
-      "fieldname": "tenant_id",
-      "label": "Tenant",
-      "fieldtype": "Link",
-      "options": "Tenant",
+      "fieldname": "tenant_code",
+      "label": "Tenant Code",
+      "fieldtype": "Data",
       "in_standard_filter": 1,
-      "description": "Row-level isolation key (spec §3.2B) — mirrors the linked Loan Application's tenant."
+      "description": "Informational mirror of the LOS-side tenant_id, for filtering/debugging only — not a Frappe User Permission-enforced boundary on this site. Tenant-scoped access control stays a LOS-side concern; callers to this site's API authenticate as a service account, not as individual borrowers/field agents."
+    },
+    {
+      "fieldname": "fldg_flag",
+      "label": "FLDG Cover (mirrored from LOS)",
+      "fieldtype": "Check",
+      "default": "0",
+      "description": "Mirrored from the LOS Loan Application at submission time. CGTMSE and FLDG are mutually exclusive (spec §1.4) — OCEN Offer's controller checks this local mirror rather than querying the LOS site's database directly, which isn't possible across the site boundary."
     },
     {
       "fieldname": "column_break_1",
@@ -101,25 +107,6 @@
       "delete": 1,
       "report": 1,
       "export": 1
-    },
-    {
-      "role": "Platform Admin",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1,
-      "report": 1,
-      "export": 1
-    },
-    {
-      "role": "Underwriter",
-      "read": 1,
-      "write": 1
-    },
-    {
-      "role": "LOS User",
-      "read": 1,
-      "write": 1
     }
   ]
 }

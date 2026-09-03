@@ -1,0 +1,109 @@
+{
+  "doctype": "DocType",
+  "name": "Loan Offer",
+  "module": "LOS Engine",
+  "custom": 0,
+  "istable": 0,
+  "issingle": 0,
+  "autoname": "format:OFFER-{#####}",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1,
+  "engine": "InnoDB",
+  "description": "LOS-side, UI-facing mirror of an OCEN offer (ADR 0005) — just enough fields to drive the borrower's offer-comparison screen (spec §5.3 'N lenders offered you a loan'). The OCEN site owns the full protocol-level record (OCEN Offer: raw payloads, requestId correlation, etc.); this is a read view built from what los_engine.api.ocen_integration.receive_ocen_offer() is told, not a Link across the site boundary.",
+  "fields": [
+    {
+      "fieldname": "loan_application",
+      "label": "Loan Application",
+      "fieldtype": "Link",
+      "options": "Loan Application",
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "ocen_offer_id",
+      "label": "OCEN Offer ID",
+      "fieldtype": "Data",
+      "description": "The OCEN site's OCEN Offer document name — a plain string reference, not a Link, per ADR 0005."
+    },
+    {
+      "fieldname": "tenant_id",
+      "label": "Tenant",
+      "fieldtype": "Link",
+      "options": "Tenant",
+      "description": "Mirrored from the linked Loan Application at creation time. Needed directly on this doctype (not just via loan_application) because Frappe's User Permission row-level restriction only cascades through a doctype's own direct Link fields — see spec §3.2B, §4.2."
+    },
+    {
+      "fieldname": "lender_name",
+      "label": "Lender Name",
+      "fieldtype": "Data",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "offer_status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Received\nPresented to Borrower\nAccepted\nRejected\nExpired",
+      "default": "Received",
+      "in_list_view": 1,
+      "in_standard_filter": 1
+    },
+    {
+      "fieldname": "column_break_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "amount",
+      "label": "Amount",
+      "fieldtype": "Currency"
+    },
+    {
+      "fieldname": "interest_rate",
+      "label": "Interest Rate (% p.a.)",
+      "fieldtype": "Percent"
+    },
+    {
+      "fieldname": "tenure_months",
+      "label": "Tenure (months)",
+      "fieldtype": "Int"
+    },
+    {
+      "fieldname": "processing_fee",
+      "label": "Processing Fee",
+      "fieldtype": "Currency"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Platform Admin",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "report": 1,
+      "export": 1
+    },
+    {
+      "role": "Underwriter",
+      "read": 1
+    },
+    {
+      "role": "LOS User",
+      "read": 1
+    },
+    {
+      "role": "Borrower",
+      "read": 1
+    }
+  ]
+}
